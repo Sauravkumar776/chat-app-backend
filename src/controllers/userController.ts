@@ -27,8 +27,8 @@ export default {
             return res.status(400).send({ message: "Invalid email or password" });
         }
 
-        const accessToken = await generateAccessToken(user);
-        const refreshToken = await generateRefreshToken(user);
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
 
         user.refreshToken = refreshToken;
         await user.save();
