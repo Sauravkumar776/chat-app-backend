@@ -1,18 +1,22 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { createServer } from 'http';
 import connectDB from './config/db';
 import routes from './routes';
+import initializeWebSocketServer from './websockets/websocketHandler';
 
 
 dotenv.config();
 connectDB();
 
 const app = express();
+
 app.use(express.json());
 app.use('/', routes)
 
-const server = createServer(app);
+app.set("port", process.env.PORT || 9000);
 
-const PORT = process.env.PORT || 5555;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const httpServer = app.listen(app.get("port"), () => {
+    console.log(`TMS secure app started at http://localhost:${app.get("port")}`);
+});
+
+initializeWebSocketServer(httpServer);
